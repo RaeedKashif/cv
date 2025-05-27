@@ -1,0 +1,11 @@
+flask
+flask-mail
+transformers
+torch
+pandas
+pdfplumber
+python-docx
+requests
+reportlab
+werkzeug
+markupsafe
