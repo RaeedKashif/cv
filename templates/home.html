@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google" content="notranslate">
+  <meta http-equiv="Content-Language" content="en">
+  <title>Home | Amal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* General Reset */
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow-x: hidden;
+      direction: ltr !important;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Hide Google Translate UI */
+    iframe.goog-te-banner-frame,
+    .goog-te-balloon-frame,
+    #goog-gt-tt,
+    .goog-te-menu-value,
+    .goog-te-gadget-icon,
+    .goog-te-gadget,
+    .goog-te-combo,
+    .goog-te-spinner-pos,
+    .goog-tooltip,
+    .goog-text-highlight,
+    .goog-te-banner,
+    .goog-te-ftab,
+    .goog-te-balloon,
+    .skiptranslate {
+      display: none !important;
+      visibility: hidden !important;
+      height: 0 !important;
+      width: 0 !important;
+      overflow: hidden !important;
+      position: absolute !important;
+      top: -9999px !important;
+      left: -9999px !important;
+    }
+
+    /* Header Styles */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background-color: #1F7D53;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      height: 120px;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #333;
+      padding-top: 120px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 100px;
+      width: 150px;
+      margin-right: 10px;
+    }
+
+    .logo h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #333;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    nav button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #493D9E;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.3s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    nav button:hover {
+      background-color: #3a2f7d;
+      transform: translateY(-2px);
+    }
+
+    .lang-switch {
+      margin-left: 10px;
+    }
+
+    .lang-switch select {
+      padding: 8px 12px;
+      font-size: 0.95rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      direction: ltr;
+      background-color: #f9f9f9;
+    }
+
+    /* Hero Section */
+    .hero {
+      display: flex;
+      align-items: center;
+      min-height: 600px;
+      background: linear-gradient(rgba(73, 61, 158, 0.8), rgba(31, 125, 83, 0.8)), 
+                  url('https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80') no-repeat center center;
+      background-size: cover;
+      color: white;
+      padding: 0 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      max-width: 700px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .hero-btn {
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      min-width: 180px;
+    }
+
+    .primary-btn {
+      background-color: #1F7D53;
+      color: white;
+      border: 2px solid #1F7D53;
+    }
+
+    .primary-btn:hover {
+      background-color: transparent;
+      color: white;
+      border-color: white;
+    }
+
+    .secondary-btn {
+      background-color: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+
+    .secondary-btn:hover {
+      background-color: white;
+      color: #493D9E;
+    }
+
+    /* Stats Section */
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      background-color: #1F7D53;
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .stat-item {
+      padding: 20px;
+      min-width: 200px;
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .stat-label {
+      font-size: 1.1rem;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 80px 20px;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .section-subtitle {
+      font-size: 1.2rem;
+      color: #666;
+      max-width: 700px;
+      margin: 0 auto 60px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      color: #493D9E;
+      margin-bottom: 20px;
+    }
+
+    .feature-title {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .feature-desc {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* How It Works Section */
+    .how-it-works {
+      padding: 80px 20px;
+      text-align: center;
+      background-color: white;
+    }
+
+    .steps-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .step-card {
+      flex: 1;
+      min-width: 250px;
+      max-width: 350px;
+      background: #f9f9f9;
+      border-radius: 10px;
+      padding: 30px;
+      position: relative;
+    }
+
+    .step-number {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 40px;
+      background-color: #1F7D53;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .step-title {
+      font-size: 1.3rem;
+      margin: 20px 0 15px;
+      color: #333;
+    }
+
+    .step-desc {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* Testimonials Section */
+    .testimonials {
+      padding: 80px 20px;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+
+    .testimonial-card {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .testimonial-text {
+      font-size: 1.2rem;
+      font-style: italic;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .testimonial-author {
+      font-weight: bold;
+      color: #1F7D53;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, #493D9E 0%, #1F7D53 100%);
+      color: white;
+      padding: 80px 20px;
+      text-align: center;
+    }
+
+    .cta-content {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta-btn {
+      margin-top: 30px;
+      background-color: white;
+      color: #493D9E;
+    }
+
+    .cta-btn:hover {
+      background-color: transparent;
+      color: white;
+      border-color: white;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #1F7D53;
+      color: white;
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      color: #ddd;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-link:hover {
+      color: white;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .social-icon {
+      color: white;
+      font-size: 1.5rem;
+      transition: color 0.3s;
+    }
+
+    .social-icon:hover {
+      color: #ddd;
+    }
+
+    .copyright {
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        height: auto;
+        padding: 15px;
+      }
+
+      .logo {
+        margin-bottom: 15px;
+      }
+
+      nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero-btn {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .stat-item {
+        min-width: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/static/logo.png" alt="Logo">
+    </div>
+    <nav>
+      <button onclick="location.href='{{ url_for('consultant_landing') }}'" class="btn btn-primary">Consultants</button>
+      <button onclick="location.href='{{ url_for('blogs') }}'" class="btn btn-primary">Blog</button>
+      <button onclick="location.href='{{ url_for('resume') }}'" class="btn btn-primary">Build Your CV</button>
+      <button onclick="location.href='{{ url_for('employers') }}'" class="btn btn-primary">Employers</button>
+      <button onclick="location.href='{{ url_for('jobs') }}'">Jobs</button>
+      <div class="lang-switch">
+        <select id="lang-select" onchange="switchLanguage(this)">
+          <option value="en">English</option>
+          <option value="ar">عربي</option>
+        </select>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section with Large Image -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Find Your Dream Job Today</h1>
+      <p>Join thousands of professionals who found their perfect career match through our platform. Fast, easy, and tailored to your skills.</p>
+      <div class="hero-buttons">
+        <button class="hero-btn primary-btn" onclick="location.href='{{ url_for('interview_prep') }}'">Get Started</button>
+        <button class="hero-btn secondary-btn" onclick="location.href='{{ url_for('employers') }}'">I'm an Employer</button>
+    </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats">
+    <div class="stat-item">
+      <div class="stat-number">10,000+</div>
+      <div class="stat-label">Jobs Available</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">5,000+</div>
+      <div class="stat-label">Companies Hiring</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">95%</div>
+      <div class="stat-label">Success Rate</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">30 Days</div>
+      <div class="stat-label">Average Hiring Time</div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <h2 class="section-title">Why Choose Us</h2>
+    <p class="section-subtitle">We connect talented professionals with top employers across various industries</p>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <h3 class="feature-title">Fast Hiring</h3>
+        <p class="feature-desc">Our streamlined process helps you get hired faster than traditional job search methods.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-briefcase"></i>
+        </div>
+        <h3 class="feature-title">Top Employers</h3>
+        <p class="feature-desc">Access exclusive job opportunities from leading companies in your industry.</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3 class="feature-title">Career Growth</h3>
+        <p class="feature-desc">Find positions that match your skills and offer real opportunities for advancement.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="how-it-works">
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-subtitle">Getting your dream job has never been easier</p>
+    
+    <div class="steps-container">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3 class="step-title">Create Your Profile</h3>
+        <p class="step-desc">Sign up and build your professional profile in minutes. Highlight your skills and experience.</p>
+      </div>
+      
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3 class="step-title">Match with Jobs</h3>
+        <p class="step-desc">Our smart algorithm matches you with relevant job opportunities based on your profile.</p>
+      </div>
+      
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3 class="step-title">Get Hired</h3>
+        <p class="step-desc">Connect directly with employers and land interviews for positions that fit your career goals.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials">
+    <h2 class="section-title">Success Stories</h2>
+    <p class="section-subtitle">What our users say about us</p>
+    
+    <div class="testimonial-card">
+      <p class="testimonial-text">"I found my dream job within two weeks of using this platform. The matching system is incredibly accurate and saved me so much time in my job search."</p>
+      <p class="testimonial-author">- Sarah Johnson, Marketing Manager</p>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="cta-content">
+      <h2 class="section-title">Ready to Take the Next Step?</h2>
+      <p class="section-subtitle">Join our platform today and unlock new career opportunities tailored just for you.</p>
+      <button class="hero-btn primary-btn cta-btn" onclick="location.href='/signup'">Create Your Free Account</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="/about" class="footer-link">About Us</a>
+      <a href="/contact" class="footer-link">Contact</a>
+      <a href="/privacy" class="footer-link">Privacy Policy</a>
+      <a href="/terms" class="footer-link">Terms of Service</a>
+      <a href="/blog" class="footer-link">Blog</a>
+    </div>
+    
+    <div class="social-icons">
+      <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+      <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+    </div>
+    
+    <p class="copyright">© 2023 Amal. All rights reserved.</p>
+  </footer>
+
+  <!-- Google Translate element off-screen -->
+  <div id="google_translate_element" style="opacity: 0; position: absolute; left: -9999px;"></div>
+
+  <script>
+    let googleTranslateInstance = null;
+
+    function googleTranslateElementInit() {
+      googleTranslateInstance = new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,ar',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+
+    function switchLanguage(select) {
+      const lang = select.value;
+
+      if (lang === 'en') {
+        document.cookie = "googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "googtrans=; domain=" + location.hostname + "; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+      } else {
+        const cookieValue = `/en/${lang}`;
+        document.cookie = `googtrans=${cookieValue}; path=/;`;
+        document.cookie = `googtrans=${cookieValue}; domain=${location.hostname}; path=/;`;
+      }
+
+      window.location.reload();
+    }
+
+    function hideGoogleTranslateUI() {
+      const selectors = [
+        '.goog-te-banner-frame',
+        '.goog-te-balloon-frame',
+        '#goog-gt-tt',
+        '.goog-te-menu-value',
+        '.goog-te-gadget-icon',
+        '.goog-te-gadget',
+        '.goog-te-combo',
+        '.skiptranslate'
+      ];
+
+      selectors.forEach(selector => {
+        const el = document.querySelector(selector);
+        if (el) {
+          el.style.display = 'none';
+          el.style.visibility = 'hidden';
+          el.style.height = '0';
+          el.style.width = '0';
+          el.style.overflow = 'hidden';
+          el.style.position = 'absolute';
+          el.style.top = '-9999px';
+          el.style.left = '-9999px';
+        }
+      });
+    }
+
+    function forceLTR() {
+      document.documentElement.setAttribute("dir", "ltr");
+      document.body.setAttribute("dir", "ltr");
+    }
+
+    function forceLTRHeader() {
+      const headerElements = document.querySelectorAll('header, nav, .logo, .lang-switch');
+      headerElements.forEach(el => {
+        el.style.direction = 'ltr';
+        el.style.textAlign = 'left';
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', function () {
+      if (!document.cookie.includes("googtrans")) {
+        document.cookie = "googtrans=/en/en; path=/;";
+        document.cookie = "googtrans=/en/en; domain=" + location.hostname + "; path=/;";
+      }
+
+      const select = document.getElementById("lang-select");
+      if (document.cookie.includes("googtrans=/en/ar")) {
+        select.value = "ar";
+      } else {
+        select.value = "en";
+      }
+
+      if (!document.querySelector('script[src*="translate.google.com"]')) {
+        const script = document.createElement('script');
+        script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        document.body.appendChild(script);
+      }
+    });
+
+    const observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        if (mutation.addedNodes) {
+          hideGoogleTranslateUI();
+        }
+      });
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        forceLTR();
+        forceLTRHeader();
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

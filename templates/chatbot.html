@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Resume Advisor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #3b82f6;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --text: #334155;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .chatbot-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            background: white;
+        }
+        
+        .chatbot-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .chatbot-avatar {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+        
+        .chatbot-title {
+            flex: 1;
+        }
+        
+        .chatbot-title h2 {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .chatbot-title p {
+            margin: 0.25rem 0 0;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+        
+        .chatbot-messages {
+            height: 500px;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background-color: var(--light);
+        }
+        
+        .message {
+            margin-bottom: 1.25rem;
+            display: flex;
+        }
+        
+        .user-message {
+            justify-content: flex-end;
+        }
+        
+        .bot-message {
+            justify-content: flex-start;
+        }
+        
+        .message-content {
+            max-width: 75%;
+            padding: 0.875rem 1.25rem;
+            border-radius: 1rem;
+            line-height: 1.5;
+            position: relative;
+        }
+        
+        .user-message .message-content {
+            background-color: var(--primary);
+            color: white;
+            border-bottom-right-radius: 0.25rem;
+        }
+        
+        .bot-message .message-content {
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-bottom-left-radius: 0.25rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .message-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 0.25rem;
+            text-align: right;
+        }
+        
+        .chatbot-input-area {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .input-group {
+            flex: 1;
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        #job-title {
+            width: 200px;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        #chat-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        
+        #chat-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .file-upload-btn {
+            background: var(--light);
+            color: var(--primary);
+            border: none;
+            border-radius: 0.5rem;
+            width: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .file-upload-btn:hover {
+            background: #e2e8f0;
+        }
+        
+        .file-upload-btn input {
+            display: none;
+        }
+        
+        #send-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            width: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        #send-btn:hover {
+            background: var(--secondary);
+        }
+        
+        .analysis-section {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .section-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .suggestion-item {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .suggestion-item:before {
+            content: "•";
+            position: absolute;
+            left: 0.5rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .strength {
+            color: var(--success);
+        }
+        
+        .weakness {
+            color: var(--warning);
+        }
+        
+        .typing-indicator {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #cbd5e1;
+            border-radius: 50%;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+        
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        
+        @media (max-width: 768px) {
+            .chatbot-container {
+                margin: 0;
+                border-radius: 0;
+                height: 100vh;
+            }
+            
+            .chatbot-messages {
+                height: calc(100vh - 200px);
+            }
+            
+            .chatbot-input-area {
+                flex-direction: column;
+            }
+            
+            #job-title {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbot-container">
+        <div class="chatbot-header">
+            <div class="chatbot-avatar">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div class="chatbot-title">
+                <h2>Professional Resume Advisor</h2>
+                <p>AI-powered resume optimization and career guidance</p>
+            </div>
+        </div>
+        
+        <div class="chatbot-messages" id="chatbot-messages">
+            <div class="message bot-message">
+                <div class="message-content">
+                    <p>Welcome to your professional resume advisor! I can help you:</p>
+                    <ul>
+                        <li>Analyze and improve your existing resume</li>
+                        <li>Provide job-specific optimization suggestions</li>
+                        <li>Identify strengths and areas for improvement</li>
+                        <li>Answer any resume-related questions</li>
+                    </ul>
+                    <p>Please upload your resume or ask me a question to get started.</p>
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chatbot-input-area">
+            <input type="text" id="job-title" placeholder="Target job title (optional)">
+            <div class="input-group">
+                <label class="file-upload-btn">
+                    <i class="fas fa-paperclip"></i>
+                    <input type="file" id="resume-upload" accept=".pdf,.docx">
+                </label>
+                <input type="text" id="chat-input" placeholder="Ask about resume improvement...">
+                <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatInput = document.getElementById('chat-input');
+            const sendBtn = document.getElementById('send-btn');
+            const chatMessages = document.getElementById('chatbot-messages');
+            const fileUpload = document.getElementById('resume-upload');
+            const jobTitleInput = document.getElementById('job-title');
+            
+            let resumeText = '';
+            let chatHistory = [];
+            
+            // Add message to chat
+            function addMessage(sender, text, isAnalysis = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}-message`;
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                
+                if (isAnalysis) {
+                    contentDiv.innerHTML = formatAnalysis(text);
+                } else if (text.includes('\n- ')) {
+                    const parts = text.split('\n- ');
+                    contentDiv.innerHTML = `<p>${parts[0]}</p><ul>${
+                        parts.slice(1).map(item => `<li>${item}</li>`).join('')
+                    }</ul>`;
+                } else {
+                    contentDiv.innerHTML = `<p>${text}</p>`;
+                }
+                
+                // Add timestamp
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'message-time';
+                timeDiv.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                contentDiv.appendChild(timeDiv);
+                messageDiv.appendChild(contentDiv);
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Add to chat history
+                chatHistory.push({
+                    sender: sender,
+                    message: text,
+                    timestamp: new Date().toISOString()
+                });
+            }
+            fileUpload.addEventListener('change', async function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    addMessage('user', `Uploaded resume: ${file.name}`);
+                    
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    const jobTitle = jobTitleInput.value.trim();
+                    if (jobTitle) {
+                        formData.append('job_title', jobTitle);
+                    }
+                    
+                    showTypingIndicator();
+                    
+                    try {
+                        // Simulate API call with comprehensive analysis
+                        setTimeout(() => {
+                            hideTypingIndicator();
+                            
+                            // Generate comprehensive analysis with 30 points
+                            const analysis = {
+                                summary: "Based on my analysis of your resume, here's a detailed breakdown of strengths and areas for improvement.",
+                                strengths: [
+                                    "Clear and professional formatting",
+                                    "Strong educational background with relevant degrees",
+                                    "Good use of action verbs in experience descriptions",
+                                    "Appropriate length (1-2 pages)",
+                                    "Relevant technical skills listed prominently",
+                                    "Quantifiable achievements included",
+                                    "Clean and consistent formatting",
+                                    "Professional email address",
+                                    "Good section organization",
+                                    "Relevant certifications included"
+                                ],
+                                weaknesses: [
+                                    "Lack of measurable achievements in some roles",
+                                    "Some job descriptions are too vague",
+                                    "Missing relevant keywords for target job",
+                                    "Inconsistent verb tenses",
+                                    "Too much irrelevant early career information",
+                                    "Passive language in some descriptions",
+                                    "Missing LinkedIn/profile links",
+                                    "Some skills not demonstrated with examples",
+                                    "Education section could be more prominent",
+                                    "Contact information not prominent enough"
+                                ],
+                                job_specific_suggestions: [
+                                    "Add more metrics to quantify achievements (increased X by Y%)",
+                                    "Tailor skills to match the job description keywords",
+                                    "Move most relevant experience to the top",
+                                    "Add a professional summary at the top",
+                                    "Include more industry-specific terminology",
+                                    "Highlight leadership experiences more prominently",
+                                    "Add projects relevant to the target position",
+                                    "Include language proficiencies if applicable",
+                                    "Add volunteer work if relevant to the role",
+                                    "Consider adding a skills matrix/visualization"
+                                ],
+                                additional_recommendations: [
+                                    "Consider adding a portfolio link if applicable",
+                                    "Ensure all dates are consistent in format",
+                                    "Remove references to outdated technologies",
+                                    "Check for any spelling or grammar errors",
+                                    "Optimize for ATS with standard section headings",
+                                    "Consider adding a QR code to your LinkedIn",
+                                    "Ensure all hyperlinks work properly",
+                                    "Use a modern but professional font",
+                                    "Maintain consistent spacing throughout",
+                                    "Consider adding a subtle color accent"
+                                ]
+                            };
+                            
+                            resumeText = "Sample extracted resume text"; // In real app, this would come from API
+                            addMessage('bot', analysis, true);
+                            
+                            // Offer follow-up suggestions
+                            addMessage('bot', "Would you like me to help you implement these improvements? " +
+                                "You can ask me specific questions about any of these suggestions.");
+                        }, 1500); // Simulate API delay
+                        
+                    } catch (error) {
+                        console.error('Error analyzing resume:', error);
+                        addMessage('bot', "I encountered an error analyzing your resume. Please try again.");
+                        hideTypingIndicator();
+                    }
+                }
+            });
+            // Format analysis results
+            function formatAnalysis(analysis) {
+                let html = `<div class="analysis-section">
+                    <div class="section-title"><i class="fas fa-chart-line"></i> Resume Analysis Summary</div>
+                    <p>${analysis.summary || 'No summary available'}</p>`;
+                
+                if (analysis.strengths && analysis.strengths.length > 0) {
+                    html += `<div class="section-title strength"><i class="fas fa-check-circle"></i> Strengths</div>`;
+                    analysis.strengths.forEach(strength => {
+                        html += `<div class="suggestion-item">${strength}</div>`;
+                    });
+                }
+                
+                if (analysis.weaknesses && analysis.weaknesses.length > 0) {
+                    html += `<div class="section-title weakness"><i class="fas fa-exclamation-triangle"></i> Areas for Improvement</div>`;
+                    analysis.weaknesses.forEach(weakness => {
+                        html += `<div class="suggestion-item">${weakness}</div>`;
+                    });
+                }
+                
+                if (analysis.job_specific_suggestions && analysis.job_specific_suggestions.length > 0) {
+                    html += `<div class="section-title"><i class="fas fa-briefcase"></i> Job-Specific Suggestions</div>`;
+                    analysis.job_specific_suggestions.forEach(suggestion => {
+                        html += `<div class="suggestion-item">${suggestion}</div>`;
+                    });
+                }
+                
+                html += `</div>`;
+                return html;
+            }
+            
+            // Show typing indicator
+            function showTypingIndicator() {
+                const indicator = document.createElement('div');
+                indicator.className = 'message bot-message';
+                indicator.id = 'typing-indicator';
+                indicator.innerHTML = `
+                    <div class="message-content">
+                        <div class="typing-indicator">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>`;
+                chatMessages.appendChild(indicator);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Hide typing indicator
+            function hideTypingIndicator() {
+                const indicator = document.getElementById('typing-indicator');
+                if (indicator) {
+                    indicator.remove();
+                }
+            }
+            
+            // Handle file upload
+            fileUpload.addEventListener('change', async function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    addMessage('user', `Uploaded resume: ${file.name}`);
+                    
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    const jobTitle = jobTitleInput.value.trim();
+                    if (jobTitle) {
+                        formData.append('job_title', jobTitle);
+                    }
+                    
+                    showTypingIndicator();
+                    
+                    try {
+                        const response = await fetch('/api/analyze_resume_advanced', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.status === 'success') {
+                            resumeText = data.text;
+                            addMessage('bot', data.analysis, true);
+                            
+                            // Offer follow-up suggestions
+                            addMessage('bot', "Would you like me to help you implement these improvements? " +
+                                "You can ask me specific questions about any of these suggestions.");
+                        } else {
+                            addMessage('bot', "Sorry, I couldn't analyze your resume. Please try again or describe your resume to me.");
+                        }
+                    } catch (error) {
+                        console.error('Error analyzing resume:', error);
+                        addMessage('bot', "I encountered an error analyzing your resume. Please try again.");
+                    } finally {
+                        hideTypingIndicator();
+                    }
+                }
+            });
+            
+            // Handle sending messages
+            async function sendMessage() {
+                const message = chatInput.value.trim();
+                if (message) {
+                    addMessage('user', message);
+                    chatInput.value = '';
+                    
+                    showTypingIndicator();
+                    
+                    try {
+                        const response = await fetch('/api/chat_advanced', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                question: message,
+                                context: resumeText
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.status === 'success') {
+                            addMessage('bot', data.answer);
+                        } else {
+                            addMessage('bot', "Sorry, I couldn't process your request. Please try again.");
+                        }
+                    } catch (error) {
+                        console.error('Chat error:', error);
+                        addMessage('bot', "I'm having trouble responding. Please try again.");
+                    } finally {
+                        hideTypingIndicator();
+                    }
+                }
+            }
+            
+            // Event listeners
+            sendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+        
+    </script>
+</body>
+</html>

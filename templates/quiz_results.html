@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results | Amal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container py-5">
+        <div class="card text-center">
+            <div class="card-header bg-primary text-white">
+                <h2>Quiz Results</h2>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h1 class="display-1 {% if score >= 70 %}text-success{% elif score >= 50 %}text-warning{% else %}text-danger{% endif %}">
+                        {{ "%.1f"|format(score) }}%
+                    </h1>
+                    <p class="lead">
+                        You answered {{ correct }} out of {{ total }} questions correctly
+                    </p>
+                </div>
+                
+                <div class="progress mb-4" style="height: 30px;">
+                    <div class="progress-bar {% if score >= 70 %}bg-success{% elif score >= 50 %}bg-warning{% else %}bg-danger{% endif %}" 
+                         role="progressbar" style="width: {{ score }}%" 
+                         aria-valuenow="{{ score }}" aria-valuemin="0" aria-valuemax="100">
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{{ url_for('start_quiz') }}" class="btn btn-primary">
+                        Try Another Quiz
+                    </a>
+                    <a href="{{ url_for('quiz_analytics') }}" class="btn btn-outline-primary">
+                        View Analytics
+                    </a>
+                    <a href="{{ url_for('interview_prep') }}" class="btn btn-secondary">
+                        Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

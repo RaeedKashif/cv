@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ blog.title }} | Amal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 80px;
+            background-color: #f8f9fa;
+        }
+        .blog-header {
+            background-color: #1F7D53;
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 40px;
+        }
+        .blog-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .blog-image {
+            max-height: 400px;
+            width: 100%;
+            object-fit: cover;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+        .author-info {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        /* Footer */
+    footer {
+      background-color: #1F7D53;
+      color: white;
+      padding: 50px 20px;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      color: #ddd;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-link:hover {
+      color: white;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .social-icon {
+      color: white;
+      font-size: 1.5rem;
+      transition: color 0.3s;
+    }
+
+    .social-icon:hover {
+      color: #ddd;
+    }
+
+    .copyright {
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        height: auto;
+        padding: 15px;
+      }
+
+      .logo {
+        margin-bottom: 15px;
+      }
+
+      nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero-btn {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .stat-item {
+        min-width: 150px;
+      }
+    }
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow-x: hidden;
+      direction: ltr !important;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Hide Google Translate UI */
+    iframe.goog-te-banner-frame,
+    .goog-te-balloon-frame,
+    #goog-gt-tt,
+    .goog-te-menu-value,
+    .goog-te-gadget-icon,
+    .goog-te-gadget,
+    .goog-te-combo,
+    .goog-te-spinner-pos,
+    .goog-tooltip,
+    .goog-text-highlight,
+    .goog-te-banner,
+    .goog-te-ftab,
+    .goog-te-balloon,
+    .skiptranslate {
+      display: none !important;
+      visibility: hidden !important;
+      height: 0 !important;
+      width: 0 !important;
+      overflow: hidden !important;
+      position: absolute !important;
+      top: -9999px !important;
+      left: -9999px !important;
+    }
+
+    /* Header Styles */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      height: 120px;
+      box-sizing: border-box;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 100px;
+      width: 150px;
+      margin-right: 10px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    nav button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #493D9E;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.3s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    nav button:hover {
+      background-color: #3a2f7d;
+      transform: translateY(-2px);
+    }
+
+    .lang-switch {
+      margin-left: 10px;
+    }
+
+    .lang-switch select {
+      padding: 8px 12px;
+      font-size: 0.95rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      direction: ltr;
+      background-color: #f9f9f9;
+    }
+    </style>
+</head>
+<header>
+    <div class="logo">
+      <img src="/static/logo.png" alt="Logo">
+    </div>
+    <nav>
+      <button onclick="location.href='/blogs'">Back</button>
+      <div class="lang-switch">
+        <select id="lang-select" onchange="switchLanguage(this)">
+          <option value="en">English</option>
+          <option value="ar">عربي</option>
+        </select>
+      </div>
+    </nav>
+  </header>
+<body>
+    <div class="blog-header text-center">
+        <div class="container">
+            <h1>{{ blog.title }}</h1>
+            <p class="lead">{{ blog.summary }}</p>
+            <span class="badge bg-light text-dark">{{ blog.category }}</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="blog-content">
+                    {% if blog.image_url %}
+                    <img src="{{ blog.image_url }}" class="blog-image" alt="{{ blog.title }}">
+                    {% endif %}
+                    <div class="blog-text">
+                        {{ blog.content|replace('\n', '<br>')|safe }}
+                    </div>
+                    <div class="author-info">
+                        <h5>About the Author</h5>
+                        <p><strong>{{ blog.author_name }}</strong></p>
+                        <p>{{ blog.specialization }}</p>
+                        <p class="text-muted">Published on {{ blog.created_at[:10] }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+         <div class="footer-links">
+      <a href="/about" class="footer-link">About Us</a>
+      <a href="/contact" class="footer-link">Contact</a>
+      <a href="/privacy" class="footer-link">Privacy Policy</a>
+      <a href="/terms" class="footer-link">Terms of Service</a>
+      <a href="/blog" class="footer-link">Blog</a>
+    </div>
+    <div class="social-icons">
+      <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+      <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+    </div>
+    <p class="copyright">© 2023 Amal. All rights reserved.</p>
+    </footer>   
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      let googleTranslateInstance = null;
+
+    function googleTranslateElementInit() {
+      googleTranslateInstance = new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,ar',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+
+    function switchLanguage(select) {
+      const lang = select.value;
+
+      if (lang === 'en') {
+        document.cookie = "googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "googtrans=; domain=" + location.hostname + "; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+      } else {
+        const cookieValue = `/en/${lang}`;
+        document.cookie = `googtrans=${cookieValue}; path=/;`;
+        document.cookie = `googtrans=${cookieValue}; domain=${location.hostname}; path=/;`;
+      }
+
+      window.location.reload();
+    }
+
+    function googleTranslateElementInit() {
+      googleTranslateInstance = new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,ar',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+
+    function switchLanguage(select) {
+      const lang = select.value;
+
+      if (lang === 'en') {
+        document.cookie = "googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "googtrans=; domain=" + location.hostname + "; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+      } else {
+        const cookieValue = `/en/${lang}`;
+        document.cookie = `googtrans=${cookieValue}; path=/;`;
+        document.cookie = `googtrans=${cookieValue}; domain=${location.hostname}; path=/;`;
+      }
+
+      window.location.reload();
+    }
+
+    // Blog category filtering
+    document.addEventListener('DOMContentLoaded', function() {
+      const categoryBtns = document.querySelectorAll('.category-btn');
+      const blogCards = document.querySelectorAll('.blog-card');
+
+      categoryBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          // Update active button
+          categoryBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+
+          const category = this.dataset.category;
+          
+          // Filter blog cards
+          blogCards.forEach(card => {
+            if (category === 'all' || card.dataset.category === category) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      // Hide Google Translate UI
+      const hideGoogleTranslateUI = () => {
+        const selectors = [
+          '.goog-te-banner-frame',
+          '.goog-te-balloon-frame',
+          '#goog-gt-tt',
+          '.goog-te-menu-value',
+          '.goog-te-gadget-icon',
+          '.goog-te-gadget',
+          '.goog-te-combo',
+          '.skiptranslate'
+        ];
+
+        selectors.forEach(selector => {
+          const el = document.querySelector(selector);
+          if (el) {
+            el.style.display = 'none';
+            el.style.visibility = 'hidden';
+            el.style.height = '0';
+            el.style.width = '0';
+            el.style.overflow = 'hidden';
+            el.style.position = 'absolute';
+            el.style.top = '-9999px';
+            el.style.left = '-9999px';
+          }
+        });
+      };
+
+      // Force LTR direction
+      const forceLTR = () => {
+        document.documentElement.setAttribute("dir", "ltr");
+        document.body.setAttribute("dir", "ltr");
+      };
+
+      // Initialize
+      if (!document.cookie.includes("googtrans")) {
+        document.cookie = "googtrans=/en/en; path=/;";
+        document.cookie = "googtrans=/en/en; domain=" + location.hostname + "; path=/;";
+      }
+
+      const select = document.getElementById("lang-select");
+      if (document.cookie.includes("googtrans=/en/ar")) {
+        select.value = "ar";
+      } else {
+        select.value = "en";
+      }
+
+      if (!document.querySelector('script[src*="translate.google.com"]')) {
+        const script = document.createElement('script');
+        script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        document.body.appendChild(script);
+      }
+
+      // Mutation observer for Google Translate elements
+      const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.addedNodes) {
+            hideGoogleTranslateUI();
+          }
+        });
+      });
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          forceLTR();
+        }, 1000);
+      });
+    });
+    </script>
+</body>
+</html>

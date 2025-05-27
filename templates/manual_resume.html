@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your Resume - Manual Input</title>
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"></noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: #f4f7fa;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+        }
+        h3 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #493D9E;
+            font-weight: 700;
+            text-align: center;
+        }
+        h4 {
+            color: #1F7D53;
+            margin-top: 30px;
+            font-weight: 600;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #493D9E;
+            margin-bottom: 8px;
+        }
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #493D9E;
+            box-shadow: 0 0 0 0.25rem rgba(73, 61, 158, 0.15);
+        }
+        .btn-submit {
+            background-color: #493D9E;
+            color: white;
+            border-radius: 8px;
+            padding: 12px 24px;
+            width: 100%;
+            border: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        .btn-submit:hover {
+            background-color: #3a2f7d;
+            transform: translateY(-2px);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .experience-container, .education-container {
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            background: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+        .experience-container:hover, .education-container:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .add-btn {
+            margin-bottom: 20px;
+            background-color: #1F7D53;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .add-btn:hover {
+            background-color: #166342;
+            transform: translateY(-2px);
+        }
+        .remove-btn {
+            background-color: #dc3545;
+            color: white;
+            margin-top: 10px;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        .remove-btn:hover {
+            background-color: #bb2d3b;
+        }
+        
+        /* Skills Section Styles */
+        .skills-section {
+            margin-bottom: 25px;
+        }
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+            min-height: 50px;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .skill-tag {
+            background-color: #493D9E;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+        .skill-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .skill-tag button {
+            background: none;
+            border: none;
+            color: white;
+            margin-left: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+        .skill-input-group {
+            display: flex;
+            gap: 10px;
+        }
+        #skill-input {
+            flex-grow: 1;
+        }
+        #add-skill-btn {
+            background-color: #1F7D53;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        #add-skill-btn:hover {
+            background-color: #166342;
+        }
+        #add-skill-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h3><i class="fas fa-file-alt me-2"></i>Create Your Professional Resume</h3>
+    <form action="{{ url_for('template_selection') }}" method="post">
+        
+        <!-- Personal Details -->
+        <div class="form-group animate-fade-in" style="animation-delay: 0.1s;">
+            <label for="name" class="form-label">Full Name</label>
+            <input type="text" name="name" id="name" class="form-control" placeholder="John Doe" required>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 form-group animate-fade-in" style="animation-delay: 0.2s;">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="john.doe@example.com" required>
+            </div>
+            <div class="col-md-6 form-group animate-fade-in" style="animation-delay: 0.3s;">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="text" name="phone" id="phone" class="form-control" placeholder="(555) 123-4567" required>
+            </div>
+        </div>
+
+        <div class="form-group animate-fade-in" style="animation-delay: 0.4s;">
+            <label for="address" class="form-label">Address</label>
+            <input type="text" name="address" id="address" class="form-control" placeholder="1234 Street Name, City, Country" required>
+        </div>
+
+        <!-- Education Section -->
+        <h4 class="animate-fade-in" style="animation-delay: 0.5s;"><i class="fas fa-graduation-cap me-2"></i>Education</h4>
+        <div id="education-fields">
+            <div class="education-container animate-fade-in" style="animation-delay: 0.6s;">
+                <div class="form-group">
+                    <label for="degree" class="form-label">Degree/Certificate</label>
+                    <input type="text" name="degree[]" class="form-control" placeholder="Bachelor of Science in Computer Science" required>
+                </div>
+                <div class="form-group">
+                    <label for="institution" class="form-label">Institution</label>
+                    <input type="text" name="institution[]" class="form-control" placeholder="XYZ University" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="education_start_date" class="form-label">Start Date</label>
+                            <input type="text" name="education_start_date[]" class="form-control" placeholder="MM/YYYY" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="education_end_date" class="form-label">End Date</label>
+                            <input type="text" name="education_end_date[]" class="form-control" placeholder="MM/YYYY or Present">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="education_description" class="form-label">Description (Optional)</label>
+                    <textarea name="education_description[]" class="form-control" rows="2" placeholder="Relevant coursework, honors, etc."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="marks" class="form-label">Marks/GPA (Optional)</label>
+                    <input type="text" name="marks[]" class="form-control" placeholder="3.8 GPA or 85%">
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-sm add-btn animate-fade-in" style="animation-delay: 0.7s;" onclick="addEducationField()">
+            <i class="fas fa-plus me-1"></i> Add Another Education
+        </button>
+
+        <!-- Work Experience Section -->
+        <h4 class="animate-fade-in" style="animation-delay: 0.8s;"><i class="fas fa-briefcase me-2"></i>Work Experience</h4>
+        <div id="experience-fields">
+            <div class="experience-container animate-fade-in" style="animation-delay: 0.9s;">
+                <div class="form-group">
+                    <label for="job_title" class="form-label">Job Title</label>
+                    <input type="text" name="job_title[]" class="form-control" placeholder="Software Developer" required>
+                </div>
+                <div class="form-group">
+                    <label for="company" class="form-label">Company</label>
+                    <input type="text" name="company[]" class="form-control" placeholder="ABC Corp" required>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="start_date" class="form-label">Start Date</label>
+                            <input type="text" name="start_date[]" class="form-control" placeholder="MM/YYYY" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="end_date" class="form-label">End Date</label>
+                            <input type="text" name="end_date[]" class="form-control" placeholder="MM/YYYY or Present">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="job_description" class="form-label">Job Description</label>
+                    <textarea name="job_description[]" class="form-control" rows="3" placeholder="Describe your responsibilities and achievements" required></textarea>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-sm add-btn animate-fade-in" style="animation-delay: 1.0s;" onclick="addExperienceField()">
+            <i class="fas fa-plus me-1"></i> Add Another Experience
+        </button>
+
+        <!-- Skills Section -->
+        <h4 class="animate-fade-in" style="animation-delay: 1.1s;"><i class="fas fa-code me-2"></i>Skills</h4>
+        <div class="skills-section animate-fade-in" style="animation-delay: 1.2s;">
+            <div class="skills-container" id="skills-container">
+                <!-- Skills will be added here dynamically -->
+            </div>
+            <div class="skill-input-group">
+                <input type="text" id="skill-input" class="form-control" placeholder="Add a skill (e.g., Python)">
+                <button type="button" id="add-skill-btn" disabled>
+                    <i class="fas fa-plus me-1"></i> Add
+                </button>
+            </div>
+            <input type="hidden" name="skills" id="skills-hidden-input" required>
+        </div>
+
+        <!-- Certifications -->
+        <h4 class="animate-fade-in" style="animation-delay: 1.3s;"><i class="fas fa-certificate me-2"></i>Certifications</h4>
+        <div class="form-group animate-fade-in" style="animation-delay: 1.4s;">
+            <textarea name="certifications" id="certifications" class="form-control" rows="2" placeholder="AWS Certified Solutions Architect, Google Analytics Certified, etc."></textarea>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn-submit animate-fade-in" style="animation-delay: 1.5s;">
+            <i class="fas fa-arrow-right me-2"></i> Continue to Template Selection
+        </button>
+    </form>
+</div>
+
+<script>
+    // Add skill functionality
+    const skillInput = document.getElementById('skill-input');
+    const addSkillBtn = document.getElementById('add-skill-btn');
+    const skillsContainer = document.getElementById('skills-container');
+    const skillsHiddenInput = document.getElementById('skills-hidden-input');
+
+    skillInput.addEventListener('input', function() {
+        addSkillBtn.disabled = this.value.trim() === '';
+    });
+
+    addSkillBtn.addEventListener('click', function() {
+        const skill = skillInput.value.trim();
+        if (skill) {
+            addSkillTag(skill);
+            skillInput.value = '';
+            addSkillBtn.disabled = true;
+            updateHiddenSkillsInput();
+        }
+    });
+
+    skillInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addSkillBtn.click();
+        }
+    });
+
+    function addSkillTag(skill) {
+        const tag = document.createElement('div');
+        tag.className = 'skill-tag animate-fade-in';
+        tag.innerHTML = `
+            ${skill}
+            <button type="button" onclick="removeSkillTag(this)">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        skillsContainer.appendChild(tag);
+    }
+
+    function removeSkillTag(button) {
+        button.parentNode.classList.add('animate__fadeOut');
+        setTimeout(() => {
+            button.parentNode.remove();
+            updateHiddenSkillsInput();
+        }, 300);
+    }
+
+    function updateHiddenSkillsInput() {
+        const tags = document.querySelectorAll('.skill-tag');
+        const skills = Array.from(tags).map(tag => 
+            tag.textContent.replace('×', '').trim()
+        );
+        skillsHiddenInput.value = skills.join(',');
+    }
+
+    // Add new education field
+    function addEducationField() {
+        const container = document.getElementById('education-fields');
+        const newField = document.createElement('div');
+        newField.className = 'education-container animate-fade-in';
+        newField.innerHTML = `
+            <div class="form-group">
+                <label class="form-label">Degree/Certificate</label>
+                <input type="text" name="degree[]" class="form-control" placeholder="Bachelor of Science in Computer Science" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Institution</label>
+                <input type="text" name="institution[]" class="form-control" placeholder="XYZ University" required>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Start Date</label>
+                        <input type="text" name="education_start_date[]" class="form-control" placeholder="MM/YYYY" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">End Date</label>
+                        <input type="text" name="education_end_date[]" class="form-control" placeholder="MM/YYYY or Present">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description (Optional)</label>
+                <textarea name="education_description[]" class="form-control" rows="2" placeholder="Relevant coursework, honors, etc."></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Marks/GPA (Optional)</label>
+                <input type="text" name="marks[]" class="form-control" placeholder="3.8 GPA or 85%">
+            </div>
+            <button type="button" class="btn btn-sm remove-btn" onclick="this.parentNode.remove();">
+                <i class="fas fa-trash me-1"></i> Remove Education
+            </button>
+        `;
+        container.appendChild(newField);
+    }
+
+    // Add new experience field
+    function addExperienceField() {
+        const container = document.getElementById('experience-fields');
+        const newField = document.createElement('div');
+        newField.className = 'experience-container animate-fade-in';
+        newField.innerHTML = `
+            <div class="form-group">
+                <label class="form-label">Job Title</label>
+                <input type="text" name="job_title[]" class="form-control" placeholder="Software Developer" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Company</label>
+                <input type="text" name="company[]" class="form-control" placeholder="ABC Corp" required>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Start Date</label>
+                        <input type="text" name="start_date[]" class="form-control" placeholder="MM/YYYY" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">End Date</label>
+                        <input type="text" name="end_date[]" class="form-control" placeholder="MM/YYYY or Present">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Job Description</label>
+                <textarea name="job_description[]" class="form-control" rows="3" placeholder="Describe your responsibilities and achievements" required></textarea>
+            </div>
+            <button type="button" class="btn btn-sm remove-btn" onclick="this.parentNode.remove();">
+                <i class="fas fa-trash me-1"></i> Remove Experience
+            </button>
+        `;
+        container.appendChild(newField);
+    }
+</script>
+</body>
+</html>

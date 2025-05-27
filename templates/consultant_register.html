@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google" content="notranslate">
+  <meta http-equiv="Content-Language" content="en">
+  <title>Consultant Registration | Amal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* General Reset */
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow-x: hidden;
+      direction: ltr !important;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    /* Hide Google Translate UI */
+    iframe.goog-te-banner-frame,
+    .goog-te-balloon-frame,
+    #goog-gt-tt,
+    .goog-te-menu-value,
+    .goog-te-gadget-icon,
+    .goog-te-gadget,
+    .goog-te-combo,
+    .goog-te-spinner-pos,
+    .goog-tooltip,
+    .goog-text-highlight,
+    .goog-te-banner,
+    .goog-te-ftab,
+    .goog-te-balloon,
+    .skiptranslate {
+      display: none !important;
+      visibility: hidden !important;
+      height: 0 !important;
+      width: 0 !important;
+      overflow: hidden !important;
+      position: absolute !important;
+      top: -9999px !important;
+      left: -9999px !important;
+    }
+
+    /* Header Styles */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background-color: #1F7D53;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      height: 120px;
+      box-sizing: border-box;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 100px;
+      width: 150px;
+      margin-right: 10px;
+    }
+
+    /* Registration Form Styles */
+    .registration-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 120px 20px 60px; /* Account for header */
+    }
+
+    .registration-box {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+
+    .registration-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .registration-header h1 {
+      color: #493D9E;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
+    .registration-header p {
+      color: #666;
+      font-size: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+    }
+
+    .form-col {
+      flex: 1;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #493D9E;
+      outline: none;
+    }
+
+    .photo-upload {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .photo-preview {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #f5f5f5;
+      overflow: hidden;
+      border: 2px solid #ddd;
+    }
+
+    .photo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .upload-btn {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+    }
+
+    .upload-btn input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .btn {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background-color: #493D9E;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #3a2f7d;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background-color: #1F7D53;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background-color: #166341;
+      transform: translateY(-2px);
+    }
+
+    .form-footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #666;
+    }
+
+    .form-footer a {
+      color: #493D9E;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .form-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .error {
+      color: #dc3545;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .registration-box {
+        padding: 30px 20px;
+      }
+
+      header {
+        flex-direction: column;
+        height: auto;
+        padding: 15px;
+      }
+
+      .logo {
+        margin-bottom: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/static/logo.png" alt="Logo">
+    </div>
+    <nav>
+      <div class="lang-switch">
+        <select id="lang-select" onchange="switchLanguage(this)">
+          <option value="en">English</option>
+          <option value="ar">عربي</option>
+        </select>
+      </div>
+    </nav>
+  </header>
+
+  <div class="registration-container">
+    <div class="registration-box">
+      <div class="registration-header">
+        <h1>Join as a Career Consultant</h1>
+        <p>Help job seekers achieve their career goals by sharing your expertise</p>
+      </div>
+
+      {% if error %}
+      <div class="error">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST" action="{{ url_for('consultant_register') }}" enctype="multipart/form-data">
+        <div class="form-row">
+          <div class="form-col">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" required>
+            </div>
+          </div>
+          <div class="form-col">
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-col">
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required>
+            </div>
+          </div>
+          <div class="form-col">
+            <div class="form-group">
+              <label for="confirm_password">Confirm Password</label>
+              <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="specialization">Specialization</label>
+          <select id="specialization" name="specialization" required>
+            <option value="">Select your area of expertise</option>
+            <option value="Career Coaching">Career Coaching</option>
+            <option value="Resume Writing">Resume Writing</option>
+            <option value="Interview Preparation">Interview Preparation</option>
+            <option value="Career Transition">Career Transition</option>
+            <option value="Leadership Development">Leadership Development</option>
+            <option value="Industry-Specific">Industry-Specific (Please specify in bio)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="years_experience">Years of Experience</label>
+          <input type="number" id="years_experience" name="years_experience" min="0" max="50" required>
+        </div>
+
+        <div class="form-group">
+          <label for="bio">Professional Bio</label>
+          <textarea id="bio" name="bio" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="linkedin">LinkedIn Profile (Optional)</label>
+          <input type="url" id="linkedin" name="linkedin">
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Register as Consultant</button>
+        </div>
+      </form>
+
+      <div class="form-footer">
+        Already have an account? <a href="{{ url_for('consultant_login') }}">Sign in here</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Google Translate element off-screen -->
+  <div id="google_translate_element" style="opacity: 0; position: absolute; left: -9999px;"></div>
+
+  <script>
+    function previewPhoto(input) {
+      const preview = document.getElementById('photoPreview');
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function(e) {
+        preview.innerHTML = `<img src="${e.target.result}" alt="Profile Preview">`;
+      }
+
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Google Translate functions (same as other pages)
+    let googleTranslateInstance = null;
+
+    function googleTranslateElementInit() {
+      googleTranslateInstance = new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,ar',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+
+    function switchLanguage(select) {
+      const lang = select.value;
+
+      if (lang === 'en') {
+        document.cookie = "googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        document.cookie = "googtrans=; domain=" + location.hostname + "; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+      } else {
+        const cookieValue = `/en/${lang}`;
+        document.cookie = `googtrans=${cookieValue}; path=/;`;
+        document.cookie = `googtrans=${cookieValue}; domain=${location.hostname}; path=/;`;
+      }
+
+      window.location.reload();
+    }
+
+    // Initialize Google Translate
+    if (!document.cookie.includes("googtrans")) {
+      document.cookie = "googtrans=/en/en; path=/;";
+      document.cookie = "googtrans=/en/en; domain=" + location.hostname + "; path=/;";
+    }
+
+    const select = document.getElementById("lang-select");
+    if (document.cookie.includes("googtrans=/en/ar")) {
+      select.value = "ar";
+    } else {
+      select.value = "en";
+    }
+
+    if (!document.querySelector('script[src*="translate.google.com"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      document.body.appendChild(script);
+    }
+
+    // Password confirmation validation
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirm_password');
+    const form = document.querySelector('form');
+
+    form.addEventListener('submit', function(e) {
+      if (password.value !== confirmPassword.value) {
+        e.preventDefault();
+        alert('Passwords do not match!');
+      }
+    });
+  </script>
+</body>
+</html>

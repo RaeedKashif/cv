@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Consultant | Amal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .user-message {
+            background-color: #e3f2fd;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            max-width: 70%;
+            margin-left: auto;
+        }
+        .consultant-message {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            max-width: 70%;
+        }
+        .consultant-card {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .consultant-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .active-consultant {
+            border: 2px solid #0d6efd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <h1 class="mb-4">Chat with Career Consultant</h1>
+        
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Available Consultants</h5>
+                    </div>
+                    <div class="card-body">
+                        {% for consultant in consultants %}
+                        <div class="card mb-2 consultant-card {% if consultant['id']|string == selected_consultant %}active-consultant{% endif %}"
+                             onclick="location.href='?consultant_id={{ consultant['id'] }}'">
+                            <div class="card-body">
+                                <h6>{{ consultant['name'] }}</h6>
+                                <p class="small text-muted mb-1">{{ consultant['specialization'] }}</p>
+                                <p class="small text-muted">{{ consultant['years_experience'] }} years experience</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-8">
+                {% if selected_consultant %}
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5>Chat with {{ consultants|selectattr('id', 'equalto', selected_consultant|int)|first|attr('name') }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chat-container" id="chatContainer">
+                            {% for chat in chats %}
+                            <div class="{% if chat['sender_type'] == 'user' %}user-message{% else %}consultant-message{% endif %}">
+                                <strong>{% if chat['sender_type'] == 'user' %}You{% else %}{{ consultants|selectattr('id', 'equalto', chat['consultant_id'])|first|attr('name') }}{% endif %}:</strong>
+                                <p class="mb-0">{{ chat['message'] }}</p>
+                                <small class="text-muted">{{ chat['sent_at'] }}</small>
+                            </div>
+                            {% else %}
+                            <p class="text-center text-muted">No messages yet. Start the conversation!</p>
+                            {% endfor %}
+                        </div>
+                        
+                        <form method="POST" action="{{ url_for('consultant_chat') }}">
+                            <input type="hidden" name="consultant_id" value="{{ selected_consultant }}">
+                            <div class="input-group">
+                                <input type="text" name="message" class="form-control" placeholder="Type your message..." required>
+                                <button type="submit" class="btn btn-primary">Send</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% else %}
+                <div class="card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-comments fa-4x text-muted mb-3"></i>
+                        <h5>Select a consultant to start chatting</h5>
+                        <p class="text-muted">Choose from our team of experienced career consultants</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{{ url_for('interview_prep') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+    <script>
+        document.getElementById('chatForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const message = formData.get('message');
+    
+    if (message.trim()) {
+        // Add message to UI immediately
+        const chatContainer = document.getElementById('chatContainer');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'user-message';
+        messageDiv.innerHTML = `<strong>You:</strong> ${message}`;
+        chatContainer.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        
+        // Clear input
+        document.getElementById('messageInput').value = '';
+        
+        // Send to server
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        }).then(response => {
+            if (!response.ok) {
+                console.error('Error sending message');
+            }
+        });
+    }
+});
+        // Auto-scroll chat to bottom
+        const chatContainer = document.getElementById('chatContainer');
+        if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        // In consultant_chat.html
+function checkForNewMessages() {
+    if (!document.getElementById('chatContainer')) return;
+    
+    fetch(`/get_chat_messages?consultant_id={{ selected_consultant }}&last_id={{ chats[-1].id if chats else 0 }}`)
+        .then(response => response.json())
+        .then(messages => {
+            const chatContainer = document.getElementById('chatContainer');
+            messages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = msg.sender_type === 'user' ? 'user-message' : 'consultant-message';
+                messageDiv.innerHTML = `<strong>${msg.sender_type === 'user' ? 'User' : 'You'}:</strong> ${msg.message}`;
+                chatContainer.appendChild(messageDiv);
+            });
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        });
+}
+
+// Check every 3 seconds
+setInterval(checkForNewMessages, 3000);
+    </script>
+</body>
+</html>

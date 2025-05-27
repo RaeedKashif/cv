@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ name }} - Resume</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            background-color: #f5f5f5;
+            line-height: 1.5;
+        }
+        .resume-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+        }
+        .sidebar {
+            width: 30%;
+            background: #34495e;
+            color: white;
+            padding: 30px 20px;
+        }
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+        .profile {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .name {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .title {
+            font-size: 14px;
+            color: #bdc3c7;
+            margin-bottom: 0;
+        }
+        .contact-info {
+            margin-bottom: 25px;
+        }
+        .contact-item {
+            margin-bottom: 12px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        .contact-icon {
+            margin-right: 10px;
+            color: #3498db;
+            width: 16px;
+            text-align: center;
+        }
+        .sidebar-section {
+            margin-bottom: 25px;
+        }
+        .sidebar-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #3498db;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .skill-item {
+            margin-bottom: 12px;
+        }
+        .skill-name {
+            font-size: 13px;
+            color: #ecf0f1;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .item {
+            margin-bottom: 18px;
+        }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .item-title {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 15px;
+        }
+        .item-subtitle {
+            color: #3498db;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .item-date {
+            color: #7f8c8d;
+            font-size: 13px;
+        }
+        .item-description {
+            font-size: 14px;
+            color: #555;
+            margin-top: 8px;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 5px;
+        }
+        li {
+            margin-bottom: 6px;
+            position: relative;
+            padding-left: 18px;
+            font-size: 13px;
+        }
+        li:before {
+            content: "•";
+            color: #3498db;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="resume-container">
+        <div class="sidebar">
+            <div class="profile">
+                <div class="name">{{ name }}</div>
+                <div class="title">Professional Resume</div>
+            </div>
+
+            <div class="contact-info">
+                <div class="sidebar-title">Contact</div>
+                <div class="contact-item">
+                    <span class="contact-icon">✉</span> {{ email }}
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">📱</span> {{ phone }}
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">📍</span> {{ address }}
+                </div>
+            </div>
+
+            {% if skills %}
+            <div class="sidebar-section">
+                <div class="sidebar-title">Skills</div>
+                {% for skill in skills %}
+                <div class="skill-item">
+                    <div class="skill-name">{{ skill }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if certifications %}
+            <div class="sidebar-section">
+                <div class="sidebar-title">Certifications</div>
+                <ul>
+                    {% for cert in certifications %}
+                    <li>{{ cert }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="main-content">
+            {% if experience %}
+            <div class="section">
+                <div class="section-title">Experience</div>
+                {% for exp in experience %}
+                <div class="item">
+                    <div class="item-header">
+                        <span class="item-title">{{ exp.job_title }}</span>
+                        <span class="item-date">{{ exp.start_date }} - {{ exp.end_date }}</span>
+                    </div>
+                    <div class="item-subtitle">{{ exp.company }}</div>
+                    {% if exp.description %}
+                    <div class="item-description">
+                        {{ exp.description | replace('\n', '<br>') | safe }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if education %}
+            <div class="section">
+                <div class="section-title">Education</div>
+                {% for edu in education %}
+                <div class="item">
+                    <div class="item-header">
+                        <span class="item-title">{{ edu.degree }}</span>
+                        <span class="item-date">{{ edu.start_date }} - {{ edu.end_date }}</span>
+                    </div>
+                    <div class="item-subtitle">{{ edu.institution }}</div>
+                    {% if edu.marks %}<div>Grade: {{ edu.marks }}</div>{% endif %}
+                    {% if edu.description %}
+                    <div class="item-description">
+                        {{ edu.description | replace('\n', '<br>') | safe }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

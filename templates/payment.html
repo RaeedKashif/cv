@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Template Purchase</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>
+    /* Header Styles (same as template_selection) */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      height: 120px;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f0f2f5, #ffffff);
+      color: #333;
+      padding-top: 150px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      height:100px;
+      width:150px;
+      margin-right: 10px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    nav button {
+      padding: 8px 16px;
+      border: none;
+      background-color: #493D9E;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background-color 0.3s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    nav button:hover {
+      background-color: #493D9E;
+    }
+
+    /* Payment Page Styles */
+    .payment-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .payment-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .payment-header h2 {
+      color: #493D9E;
+      margin-bottom: 10px;
+    }
+
+    .template-preview {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #f9f9f9;
+      border-radius: 8px;
+    }
+
+    .template-preview img {
+      width: 200px;
+      height: 280px;
+      object-fit: cover;
+      border: 1px solid #ddd;
+      margin-right: 20px;
+    }
+
+    .template-info h3 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    .price {
+      font-size: 24px;
+      font-weight: bold;
+      color: #493D9E;
+      margin: 10px 0;
+    }
+
+    .payment-form {
+      margin-top: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .card-element {
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background: white;
+    }
+
+    .payment-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #493D9E;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+    }
+
+    .payment-btn:hover {
+      background-color: #3a2f7d;
+    }
+
+    .payment-methods {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .payment-method {
+      width: 50px;
+      height: 30px;
+      object-fit: contain;
+    }
+
+    .secure-notice {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+      color: #666;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/static/logo.png" alt="Logo">
+    </div>
+    <nav>
+      <button onclick="location.href='/home'">Back to Home</button>
+      <button onclick="location.href='/logout'">Logout</button>
+    </nav>
+  </header>
+
+  <div class="payment-container">
+    <div class="payment-header">
+      <h2>Complete Your Purchase</h2>
+      <p>Unlock premium features with your selected template</p>
+    </div>
+
+    <div class="template-preview">
+      <img id="template-preview-img" src="" alt="Selected Template">
+      <div class="template-info">
+        <h3 id="template-name">Template Name</h3>
+        <div class="price">$4.99</div>
+        <p>Premium resume template with enhanced design features and customization options.</p>
+        <ul>
+          <li>Exclusive layout options</li>
+          <li>Priority support</li>
+          <li>Unlimited downloads</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="payment-form">
+      <h3>Payment Information</h3>
+      
+      <div class="form-group">
+        <label for="name">Name on Card</label>
+        <input type="text" id="name" placeholder="John Smith">
+      </div>
+
+      <div class="form-group">
+        <label>Card Details</label>
+        <div class="card-element" id="card-element">
+          <!-- Stripe Elements will be inserted here -->
+        </div>
+      </div>
+
+      <button class="payment-btn" id="submit-payment">Pay $4.99</button>
+
+      <div class="payment-methods">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/visa/visa-original.svg" class="payment-method" alt="Visa">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mastercard/mastercard-original.svg" class="payment-method" alt="Mastercard">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" class="payment-method" alt="Apple Pay">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" class="payment-method" alt="Google Pay">
+      </div>
+
+      <div class="secure-notice">
+        <i class="fas fa-lock"></i>
+        <span>Your payment is secure and encrypted</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Get template ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const templateId = urlParams.get('template_id');
+    
+    // Set template preview image and name based on ID
+    document.getElementById('template-preview-img').src = `/static/templates/template${templateId}-preview.jpg`;
+    document.getElementById('template-name').textContent = getTemplateName(templateId);
+
+    function getTemplateName(id) {
+      const names = {
+        '5': 'Luxury Executive',
+        '6': 'Tech Innovator',
+        '7': 'Creative Professional',
+        '8': 'Modern Executive'
+      };
+      return names[id] || 'Premium Template';
+    }
+
+    // Stripe Payment Integration (example - replace with your actual Stripe public key)
+    const stripe = Stripe('pk_test_your_stripe_public_key_here');
+    const elements = stripe.elements();
+    const cardElement = elements.create('card');
+    cardElement.mount('#card-element');
+
+    document.getElementById('submit-payment').addEventListener('click', async () => {
+      const {error, paymentMethod} = await stripe.createPaymentMethod({
+        type: 'card',
+        card: cardElement,
+        billing_details: {
+          name: document.getElementById('name').value
+        }
+      });
+
+      if (error) {
+        alert(error.message);
+      } else {
+        // Send paymentMethod.id to your server to complete the payment
+        fetch('/process_payment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            payment_method_id: paymentMethod.id,
+            template_id: templateId,
+            amount: 499 // $4.99 in cents
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('Payment successful! Your premium template is now available.');
+            window.location.href = '/generate_from_template';
+          } else {
+            alert('Payment failed: ' + data.error);
+          }
+        });
+      }
+    });
+  </script>
+  <!-- Load Stripe.js (replace with your actual Stripe publishable key) -->
+  <script src="https://js.stripe.com/v3/"></script>
+</body>
+</html>

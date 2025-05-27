@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ name }} - Professional Resume</title>
+    <style>
+        body {
+            font-family: 'Calibri', 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #493D9E;
+            padding-bottom: 20px;
+        }
+        .name {
+            font-size: 32px;
+            font-weight: bold;
+            color: #493D9E;
+            margin-bottom: 5px;
+        }
+        .contact-info {
+            font-size: 16px;
+            color: #666;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #493D9E;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        .experience-item, .education-item {
+            margin-bottom: 20px;
+        }
+        .job-title, .degree {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .company, .institution {
+            font-style: italic;
+        }
+        .date {
+            color: #666;
+            font-size: 14px;
+        }
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .skill {
+            background-color: #493D9E;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="name">{{ name }}</div>
+        <div class="contact-info">
+            {{ email }} | {{ phone }} | {{ address }}
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Professional Summary</div>
+        <p>A dedicated professional with experience in various fields. Skilled in multiple technologies and always eager to learn new things.</p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Work Experience</div>
+        {% for exp in experience %}
+        <div class="experience-item">
+            <div class="job-title">{{ exp.job_title }}</div>
+            <div class="company">{{ exp.company }}</div>
+            <div class="date">{{ exp.start_date }} - {{ exp.end_date }}</div>
+            <div class="description">{{ exp.description | nl2br }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="section">
+        <div class="section-title">Education</div>
+        {% for edu in education %}
+        <div class="education-item">
+            <div class="degree">{{ edu.degree }}</div>
+            <div class="institution">{{ edu.institution }}</div>
+            <div class="date">{{ edu.start_date }} - {{ edu.end_date }}</div>
+            {% if edu.marks %}<div>Grade: {{ edu.marks }}</div>{% endif %}
+            {% if edu.description %}<div class="description">{{ edu.description | nl2br }}</div>{% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="section">
+        <div class="section-title">Skills</div>
+        <div class="skills-list">
+            {% for skill in skills %}
+            <div class="skill">{{ skill }}</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Certifications</div>
+        <ul>
+            {% for cert in certifications %}
+            <li>{{ cert }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Analytics | Amal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.0.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.2.0"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .progress {
+            height: 25px;
+        }
+        .trend-up {
+            color: #28a745;
+        }
+        .trend-down {
+            color: #dc3545;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <h1 class="mb-4">Your Quiz Analytics</h1>
+        
+        {% if analytics.overall.total_questions > 0 %}
+        <div class="row">
+            <!-- Overall Performance -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5>Overall Performance</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="overallChart"></canvas>
+                        </div>
+                        <div class="mt-3">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p><strong>Questions Answered:</strong> {{ analytics.overall.total_questions }}</p>
+                                </div>
+                                <div class="text-end">
+                                    <h3 class="{{ 'trend-up' if analytics.improvement.trend == 'up' else 'trend-down' }}">
+                                        {{ analytics.overall.accuracy_percentage }}%
+                                    </h3>
+                                    <small>Accuracy</small>
+                                </div>
+                            </div>
+                            {% if analytics.improvement %}
+                            <div class="mt-2">
+                                <small>
+                                    <i class="fas fa-arrow-{{ 'up trend-up' if analytics.improvement.trend == 'up' else 'down trend-down' }}"></i>
+                                    {{ analytics.improvement.percentage_change|abs }}% 
+                                    {{ 'improvement' if analytics.improvement.trend == 'up' else 'decline' }} over time
+                                </small>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Trends -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5>Performance Over Time</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Performance -->
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5>Performance by Category</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container" style="height: 400px;">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strengths & Weaknesses -->
+            <div class="col-md-6">
+                {% if analytics.strongest_categories %}
+                <div class="card border-success">
+                    <div class="card-header bg-success text-white">
+                        <h5><i class="fas fa-thumbs-up"></i> Your Strengths</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {% for category in analytics.strongest_categories %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ category.job_role }}
+                                <span class="badge bg-success rounded-pill">
+                                    {{ category.accuracy_percentage|round(1) }}%
+                                </span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                {% if analytics.weakest_categories %}
+                <div class="card border-danger">
+                    <div class="card-header bg-danger text-white">
+                        <h5><i class="fas fa-thumbs-down"></i> Areas to Improve</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {% for category in analytics.weakest_categories %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ category.job_role }}
+                                <span class="badge bg-danger rounded-pill">
+                                    {{ category.accuracy_percentage|round(1) }}%
+                                </span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> You haven't taken any quizzes yet. 
+            <a href="{{ url_for('start_quiz') }}" class="alert-link">Take a quiz</a> to see your analytics.
+        </div>
+        {% endif %}
+        
+        <div class="text-center mt-4">
+            <a href="{{ url_for('interview_prep') }}" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    {% if analytics.overall.total_questions > 0 %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Destroy any existing charts
+            Object.keys(window).forEach(key => {
+                if (key.endsWith('Chart') && window[key] && typeof window[key].destroy === 'function') {
+                    window[key].destroy();
+                }
+            });
+
+            // Overall Performance Chart (Doughnut)
+            const overallCtx = document.getElementById('overallChart').getContext('2d');
+            window.overallChart = new Chart(overallCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Correct', 'Incorrect'],
+                    datasets: [{
+                        data: [
+                            {{ analytics.overall.correct_answers }},
+                            {{ analytics.overall.total_questions - analytics.overall.correct_answers }}
+                        ],
+                        backgroundColor: ['#28a745', '#dc3545'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const value = context.raw;
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${context.label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Performance Trend Chart (Line)
+            const trendCtx = document.getElementById('trendChart').getContext('2d');
+            window.trendChart = new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: [
+                        {% for quiz in analytics.by_date %}
+                            "{{ quiz.quiz_date }}"{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        label: 'Accuracy (%)',
+                        data: [
+                            {% for quiz in analytics.by_date %}
+                                {{ quiz.accuracy_percentage|round(1) }}{% if not loop.last %},{% endif %}
+                            {% endfor %}
+                        ],
+                        backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Accuracy (%)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Quiz Date'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Category Performance Chart (Bar)
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            window.categoryChart = new Chart(categoryCtx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        {% for category in analytics.by_category %}
+                            "{{ category.job_role }}"{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    ],
+                    datasets: [{
+                        label: 'Accuracy (%)',
+                        data: [
+                            {% for category in analytics.by_category %}
+                                {{ category.accuracy_percentage|round(1) }}{% if not loop.last %},{% endif %}
+                            {% endfor %}
+                        ],
+                        backgroundColor: [
+                            {% for category in analytics.by_category %}
+                                {% if loop.index0 < 3 %}
+                                    'rgba(40, 167, 69, 0.7)',
+                                {% else %}
+                                    'rgba(0, 123, 255, 0.7)',
+                                {% endif %}
+                            {% endfor %}
+                        ],
+                        borderColor: [
+                            {% for category in analytics.by_category %}
+                                {% if loop.index0 < 3 %}
+                                    'rgba(40, 167, 69, 1)',
+                                {% else %}
+                                    'rgba(0, 123, 255, 1)',
+                                {% endif %}
+                            {% endfor %}
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Accuracy (%)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Job Role'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const category = {{ analytics.by_category|tojson }};
+                                    const current = category[context.dataIndex];
+                                    return [
+                                        `Correct: ${current.correct_answers}/${current.total_questions}`,
+                                        `Accuracy: ${context.raw}%`
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Builder | Amal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --primary-light: #6366F1;
+      --primary-dark: #4338CA;
+      --secondary: #10B981;
+      --secondary-light: #34D399;
+      --secondary-dark: #059669;
+      --light: #f8fafc;
+      --lighter: #f1f5f9;
+      --dark: #1E293B;
+      --darker: #0F172A;
+      --gray: #64748B;
+      --gray-light: #CBD5E1;
+      --danger: #EF4444;
+      --warning: #F59E0B;
+      --success: #10B981;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--lighter);
+      color: var(--dark);
+      line-height: 1.5;
+      scroll-behavior: smooth;
+    }
+    
+    @supports (font-variation-settings: normal) {
+      html, body {
+        font-family: 'Inter var', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      }
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 600;
+      line-height: 1.3;
+      margin-top: 0;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+    }
+    
+    h2 {
+      font-size: 2rem;
+    }
+    
+    h3 {
+      font-size: 1.5rem;
+    }
+    
+    p {
+      margin-bottom: 1rem;
+    }
+    
+    a {
+      text-decoration: none;
+      color: var(--primary);
+      transition: var(--transition);
+    }
+    
+    a:hover {
+      color: var(--primary-dark);
+    }
+    
+    header {
+      background-color: white;
+      color: var(--darker);
+      padding: 0 2rem;
+      box-shadow: var(--shadow-sm);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    body {
+      padding-top: 72px;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .logo img {
+      height: 36px;
+    }
+    
+    .logo h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+      -webkit-text-fill-color: transparent;
+    }
+    
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    nav button {
+      padding: 8px 16px;
+      border: none;
+      background-color: transparent;
+      color: var(--gray);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    nav button:hover {
+      color: var(--primary);
+      background-color: rgba(79, 70, 229, 0.1);
+    }
+    
+    nav button i {
+      font-size: 1rem;
+    }
+    
+    .active-nav-btn {
+      color: var(--primary);
+      background-color: rgba(79, 70, 229, 0.1);
+    }
+    
+    .resume-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    
+    .hero-section {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 3rem 2rem;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+    }
+    
+    .hero-section h1 {
+      color: var(--darker);
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    
+    .hero-section p {
+      color: var(--gray);
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+    }
+    
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    
+    .option-card {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border: 1px solid var(--gray-light);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .option-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary-light);
+    }
+    
+    .option-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+    }
+    
+    .option-icon {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      -webkit-text-fill-color: transparent;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      border-radius: 50%;
+      background-color: rgba(79, 70, 229, 0.1);
+    }
+    
+    .option-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--darker);
+    }
+    
+    .option-desc {
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+    
+    .option-btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transition);
+      cursor: pointer;
+      text-decoration: none;
+      width: 100%;
+      font-size: 1rem;
+    }
+    
+    .primary-btn {
+      background: var(--primary);
+      color: white;
+      border: 2px solid var(--primary);
+    }
+    
+    .primary-btn:hover {
+      background: var(--primary-dark);
+      border-color: var(--primary-dark);
+      transform: translateY(-2px);
+      color: white;
+    }
+    
+    .secondary-btn {
+      background: white;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+    
+    .secondary-btn:hover {
+      background: rgba(79, 70, 229, 0.1);
+      transform: translateY(-2px);
+      color: var(--primary);
+    }
+    
+    .chatbot-wrapper {
+      margin-top: 4rem;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      border: 1px solid var(--gray-light);
+    }
+    
+    .chatbot-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .chatbot-avatar {
+      background: white;
+      color: var(--primary);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .chatbot-header-text h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .chatbot-header-text p {
+      margin: 5px 0 0;
+      opacity: 0.9;
+      font-size: 0.9rem;
+    }
+    
+    .chatbot-messages {
+      height: 400px;
+      padding: 1.5rem;
+      overflow-y: auto;
+      background-color: var(--lighter);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .message {
+      display: flex;
+      max-width: 85%;
+    }
+    
+    .user-message {
+      align-self: flex-end;
+    }
+    
+    .bot-message {
+      align-self: flex-start;
+    }
+    
+    .message-content {
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-md);
+      line-height: 1.6;
+      position: relative;
+    }
+    
+    .user-message .message-content {
+      background-color: var(--primary);
+      color: white;
+      border-bottom-right-radius: 0;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .bot-message .message-content {
+      background-color: white;
+      border: 1px solid var(--gray-light);
+      border-bottom-left-radius: 0;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .message-content p {
+      margin-bottom: 0;
+    }
+    
+    .message-content ul {
+      padding-left: 1.25rem;
+      margin: 0.5rem 0;
+    }
+    
+    .message-content li {
+      margin-bottom: 0.25rem;
+    }
+    
+    .chatbot-input-container {
+      padding: 1rem;
+      border-top: 1px solid var(--gray-light);
+      background: white;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    
+    .file-upload-btn {
+      background: var(--lighter);
+      color: var(--primary);
+      border: none;
+      border-radius: var(--radius-sm);
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+    
+    .file-upload-btn:hover {
+      background: var(--gray-light);
+      color: var(--primary-dark);
+    }
+    
+    #chat-input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      transition: var(--transition);
+      min-height: 48px;
+      max-height: 120px;
+      resize: none;
+    }
+    
+    #chat-input:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+    }
+    
+    #send-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+    
+    #send-btn:hover {
+      background: var(--primary-dark);
+    }
+    
+    .typing-indicator {
+      display: flex;
+      padding: 0.5rem;
+    }
+    
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--gray);
+      border-radius: 50%;
+      margin: 0 2px;
+      animation: typingAnimation 1.4s infinite ease-in-out;
+    }
+    
+    .typing-dot:nth-child(1) {
+      animation-delay: 0s;
+    }
+    
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    
+    @keyframes typingAnimation {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-5px); }
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 0.35em 0.65em;
+      font-size: 0.75em;
+      font-weight: 700;
+      line-height: 1;
+      color: white;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: baseline;
+      border-radius: 50rem;
+    }
+    
+    .badge-primary {
+      background-color: var(--primary);
+    }
+    
+    .badge-secondary {
+      background-color: var(--secondary);
+    }
+    
+    @media (max-width: 992px) {
+      .hero-section h1 {
+        font-size: 2.25rem;
+      }
+      
+      .options-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+    }
+    
+    @media (max-width: 768px) {
+      header {
+        padding: 0 1rem;
+        height: 64px;
+      }
+      
+      body {
+        padding-top: 64px;
+      }
+      
+      .logo h2 {
+        font-size: 1.25rem;
+      }
+      
+      nav button span {
+        display: none;
+      }
+      
+      nav button i {
+        font-size: 1.25rem;
+      }
+      
+      .resume-container {
+        padding: 0 1rem;
+      }
+      
+      .hero-section {
+        padding: 2rem 1rem;
+      }
+      
+      .hero-section h1 {
+        font-size: 2rem;
+      }
+      
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .chatbot-messages {
+        height: 350px;
+        padding: 1rem;
+      }
+      
+      .message {
+        max-width: 90%;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .hero-section h1 {
+        font-size: 1.75rem;
+      }
+      
+      .hero-section p {
+        font-size: 1rem;
+      }
+      
+      .chatbot-messages {
+        height: 300px;
+      }
+      
+      .option-card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="/static/logo.png" alt="Amal Logo">
+      <h2>Amal</h2>
+    </div>
+    <nav>
+      <button onclick="location.href='/home'">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </button>
+      <button onclick="location.href='/jobs'">
+        <i class="fas fa-briefcase"></i>
+        <span>Jobs</span>
+      </button>
+      <button onclick="location.href='/blogs'">
+        <i class="fas fa-blog"></i>
+        <span>Blog</span>
+      </button>
+      <button class="active-nav-btn" onclick="location.href='/resume'">
+        <i class="fas fa-file-alt"></i>
+        <span>Resume</span>
+      </button>
+      <button onclick="location.href='/logout'">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </button>
+    </nav>
+  </header>
+
+  <div class="resume-container">
+    <div class="hero-section">
+      <h1>Craft Your Perfect Resume</h1>
+      <p>Get expert guidance from our AI assistant to create, improve, or tailor your resume for your dream job</p>
+      <div class="hero-cta">
+        <button onclick="location.href='/manual_resume'" class="option-btn primary-btn">
+          <i class="fas fa-magic"></i> Start with AI
+        </button>
+        <a href="/manual_resume" class="option-btn secondary-btn">
+          <i class="fas fa-edit"></i> Create Manually
+        </a>
+      </div>
+    </div>
+
+    <div class="options-grid">
+      <div class="option-card">
+        <div class="option-icon">
+          <i class="fas fa-file-alt"></i>
+        </div>
+        <h3 class="option-title">Manual Resume Builder</h3>
+        <p class="option-desc">Fill out a form with all your details to create a professional resume step by step with full control over every section.</p>
+        <a href="/manual_resume" class="option-btn primary-btn">
+          <i class="fas fa-edit"></i> Create Manually
+        </a>
+      </div>
+
+      <div class="option-card">
+        <div class="option-icon">
+          <i class="fas fa-robot"></i>
+        </div>
+        <h3 class="option-title">AI-Assisted Builder</h3>
+        <p class="option-desc">Let our AI guide you through creating the perfect resume with smart suggestions tailored to your career goals.</p>
+        <button onclick="location.href='/manual_resume'" class="option-btn primary-btn">
+          <i class="fas fa-magic"></i> Start with AI
+        </button>
+      </div>
+
+      <div class="option-card">
+        <div class="option-icon">
+          <i class="fas fa-file-upload"></i>
+        </div>
+        <h3 class="option-title">Improve My CV</h3>
+        <p class="option-desc">Upload your existing resume for expert feedback and targeted improvements to make it stand out to recruiters.</p>
+        <a href="/chatbot" class="option-btn secondary-btn">
+          <i class="fas fa-upload"></i> Improve Resume
+        </a>
+      </div>
+    </div>
+
+    <div class="chatbot-wrapper">
+      <div class="chatbot-header">
+        <div class="chatbot-avatar">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="chatbot-header-text">
+          <h3>Resume Assistant</h3>
+          <p>How can I help with your resume today?</p>
+        </div>
+      </div>
+      
+      <div class="chatbot-messages" id="chatbot-messages">
+        <div class="message bot-message">
+          <div class="message-content">
+            <p>Hello! I'm here to help you create a resume. You can:</p>
+            <ul>
+              <li>Ask me resume-related questions</li>
+              <li>Get tips for specific jobs</li>
+              <li>Learn how to make your resume stand out</li>
+            </ul>
+            <p>When you're ready to create your resume, just click the "Create Resume" button below.</p>
+            <button onclick="location.href='/manual_resume'" class="option-btn primary-btn" style="margin-top: 1rem;">
+              <i class="fas fa-file-alt"></i> Create Resume
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="chatbot-input-container">
+        <textarea id="chat-input" placeholder="Ask about resumes..." rows="1"></textarea>
+        <button id="send-btn" title="Send Message">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const chatInput = document.getElementById('chat-input');
+  const sendBtn = document.getElementById('send-btn');
+  const chatMessages = document.getElementById('chatbot-messages');
+  
+  // Auto-resize textarea
+  function adjustTextareaHeight() {
+    chatInput.style.height = 'auto';
+    chatInput.style.height = (chatInput.scrollHeight) + 'px';
+  }
+  
+  chatInput.addEventListener('input', adjustTextareaHeight);
+  adjustTextareaHeight();
+  
+  // Add message to chat
+  function addMessage(sender, text) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message`;
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+    
+    // Format lists and paragraphs
+    if (text.includes('\n- ')) {
+      const parts = text.split('\n- ');
+      contentDiv.innerHTML = `<p>${parts[0]}</p><ul>${
+        parts.slice(1).map(item => `<li>${item}</li>`).join('')
+      }</ul>`;
+    } else {
+      contentDiv.innerHTML = `<p>${text}</p>`;
+    }
+    
+    messageDiv.appendChild(contentDiv);
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+  
+  // Create typing indicator
+  function showTypingIndicator() {
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'message bot-message';
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content typing-indicator';
+    
+    for (let i = 0; i < 3; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'typing-dot';
+      contentDiv.appendChild(dot);
+    }
+    
+    typingDiv.appendChild(contentDiv);
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    return typingDiv;
+  }
+  
+  // Handle sending messages
+  function sendMessage() {
+    const message = chatInput.value.trim();
+    if (message) {
+      addMessage('user', message);
+      chatInput.value = '';
+      adjustTextareaHeight();
+      
+      // Check if user wants to create a resume
+      if (message.toLowerCase().includes('create') || 
+          message.toLowerCase().includes('resume') ||
+          message.toLowerCase().includes('make') ||
+          message.toLowerCase().includes('build')) {
+        addMessage('bot', "I'll redirect you to our resume builder where you can create your resume step by step.");
+        setTimeout(() => {
+          window.location.href = '/manual_resume';
+        }, 1500);
+        return;
+      }
+      
+      getBotResponse(message);
+    }
+  }
+  
+  // Get bot response
+  function getBotResponse(userInput) {
+    const typingIndicator = showTypingIndicator();
+    
+    // Simple local responses for resume-related questions
+    setTimeout(() => {
+      // Remove typing indicator
+      chatMessages.removeChild(typingIndicator);
+      
+      const responses = [
+        "For work experience, use bullet points starting with action verbs like 'Developed', 'Managed', or 'Increased'.",
+        "Keep your resume to 1-2 pages maximum, focusing on relevant experience.",
+        "Include skills that match the job description, especially technical ones.",
+        "Quantify achievements where possible (e.g., 'Increased sales by 30% in Q3').",
+        "Use a clean, professional format with consistent formatting throughout.",
+        "Tailor your resume for each job application by matching keywords from the job description.",
+        "List your most recent experience first, with dates for each position.",
+        "Include relevant education, certifications, and professional development.",
+        "Consider adding a skills section with both hard and soft skills.",
+        "Proofread carefully for spelling and grammar errors.",
+        "Use a professional email address and include your LinkedIn profile if available."
+      ];
+      
+      // Check for specific questions
+      if (userInput.toLowerCase().includes('length')) {
+        addMessage('bot', "A standard resume should be 1-2 pages. Recent graduates can often use 1 page, while experienced professionals may need 2 pages.");
+      } 
+      else if (userInput.toLowerCase().includes('template')) {
+        addMessage('bot', "We have several templates available in our resume builder. Click the 'Create Resume' button below to see them and choose one that fits your style.");
+        const button = document.createElement('button');
+        button.className = 'option-btn primary-btn';
+        button.style.marginTop = '1rem';
+        button.innerHTML = '<i class="fas fa-file-alt"></i> Create Resume';
+        button.onclick = function() { window.location.href = '/manual_resume'; };
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message bot-message';
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        contentDiv.appendChild(button);
+        messageDiv.appendChild(contentDiv);
+        chatMessages.appendChild(messageDiv);
+      }
+      else if (userInput.toLowerCase().includes('skill') || userInput.toLowerCase().includes('include')) {
+        addMessage('bot', "You should include skills that are relevant to the job you're applying for. Technical skills (like software proficiency) and soft skills (like communication) are both important. Our resume builder will help you organize these effectively.");
+      }
+      else {
+        // Random response for general questions
+        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+        addMessage('bot', randomResponse);
+        
+        // Add a prompt to create resume
+        setTimeout(() => {
+          addMessage('bot', "Ready to create your resume now?");
+          const button = document.createElement('button');
+          button.className = 'option-btn primary-btn';
+          button.style.marginTop = '1rem';
+          button.innerHTML = '<i class="fas fa-file-alt"></i> Create Resume';
+          button.onclick = function() { window.location.href = '/manual_resume'; };
+          
+          const messageDiv = document.createElement('div');
+          messageDiv.className = 'message bot-message';
+          const contentDiv = document.createElement('div');
+          contentDiv.className = 'message-content';
+          contentDiv.appendChild(button);
+          messageDiv.appendChild(contentDiv);
+          chatMessages.appendChild(messageDiv);
+        }, 500);
+      }
+    }, 1000);
+  }
+  
+  // Event listeners for sending messages
+  sendBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+});
+</script>
+</body>
+</html>

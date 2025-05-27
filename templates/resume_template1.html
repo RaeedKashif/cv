@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ name }} - Resume</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 40px;
+            color: #333;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .section {
+            margin-top: 30px;
+        }
+        .contact {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .line {
+            height: 1px;
+            background-color: #ccc;
+            margin: 10px 0;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        .bold {
+            font-weight: bold;
+        }
+        .education-item, .experience-item {
+            margin-bottom: 15px;
+        }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+        }
+        .item-title {
+            font-weight: bold;
+        }
+        .item-date {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>{{ name }}</h1>
+    <div class="contact">
+        {{ email }} | {{ phone }} | {{ address }}
+    </div>
+    <div class="line"></div>
+
+    {% if education %}
+    <div class="section">
+        <h2>Education</h2>
+        {% for edu in education %}
+        <div class="education-item">
+            <div class="item-header">
+                <span class="item-title">{{ edu.degree }}</span>
+                <span class="item-date">{{ edu.start_date }} - {{ edu.end_date }}</span>
+            </div>
+            <div>{{ edu.institution }}</div>
+            {% if edu.marks %}<div>Grade: {{ edu.marks }}</div>{% endif %}
+            {% if edu.description %}<div>{{ edu.description | replace('\n', '<br>') | safe }}</div>{% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if experience %}
+    <div class="section">
+        <h2>Experience</h2>
+        {% for exp in experience %}
+        <div class="experience-item">
+            <div class="item-header">
+                <span class="item-title">{{ exp.job_title }}</span>
+                <span class="item-date">{{ exp.start_date }} - {{ exp.end_date }}</span>
+            </div>
+            <div>{{ exp.company }}</div>
+            {% if exp.description %}<div>{{ exp.description | replace('\n', '<br>') | safe }}</div>{% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if skills %}
+    <div class="section">
+        <h2>Skills</h2>
+        <ul>
+            {% for skill in skills %}
+            <li>{{ skill }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if certifications %}
+    <div class="section">
+        <h2>Certifications</h2>
+        <ul>
+            {% for cert in certifications %}
+            <li>{{ cert }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+</body>
+</html>

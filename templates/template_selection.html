@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Resume Template</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #493D9E;
+            --secondary: #1F7D53;
+            --accent: #FF7E33;
+            --light: #F8F9FA;
+            --dark: #2D3748;
+        }
+        
+        /* General Reset */
+        html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow-x: hidden;
+            direction: ltr !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Hide Google Translate UI */
+        iframe.goog-te-banner-frame,
+        .goog-te-balloon-frame,
+        #goog-gt-tt,
+        .goog-te-menu-value,
+        .goog-te-gadget-icon,
+        .goog-te-gadget,
+        .goog-te-combo,
+        .goog-te-spinner-pos,
+        .goog-tooltip,
+        .goog-text-highlight,
+        .goog-te-banner,
+        .goog-te-ftab,
+        .goog-te-balloon,
+        .skiptranslate {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            width: 0 !important;
+            overflow: hidden !important;
+            position: absolute !important;
+            top: -9999px !important;
+            left: -9999px !important;
+        }
+
+        /* Header Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            height: 80px;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+            margin-right: 10px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        nav button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #493D9E;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        nav button:hover {
+            background-color: #3a2f7d;
+            transform: translateY(-2px);
+        }
+
+        .lang-switch {
+            margin-left: 10px;
+        }
+
+        .lang-switch select {
+            padding: 8px 12px;
+            font-size: 0.95rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            direction: ltr;
+            background-color: #f9f9f9;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            padding-top: 100px;
+        }
+        
+        .template-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.08);
+        }
+        
+        .template-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .template-header h2 {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .template-header p {
+            color: var(--dark);
+            font-size: 1.2rem;
+            margin-bottom: 0;
+        }
+        
+        .template-categories {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .category {
+            background: #f9f9f9;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #eee;
+        }
+        
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .category-title i {
+            margin-right: 15px;
+            color: var(--accent);
+            font-size: 1.3rem;
+        }
+        
+        .template-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .template-option {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .template-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+        }
+        
+        .template-option.selected {
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 0 3px rgba(73, 61, 158, 0.2);
+        }
+        
+        .template-preview {
+            height: 350px;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 1px solid #ddd;
+        }
+        
+        .template-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s;
+        }
+        
+        .template-option:hover .template-preview img {
+            transform: scale(1.03);
+        }
+        
+        .template-name {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+        
+        .template-desc {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            min-height: 40px;
+        }
+        
+        .select-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+        
+        .select-btn:hover {
+            background-color: #3a2f7d;
+            transform: translateY(-2px);
+        }
+        
+        .generate-btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            margin-top: 50px;
+            display: block;
+            width: 300px;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .generate-btn:hover {
+            background-color: #166342;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(31, 125, 83, 0.3);
+        }
+        
+        .generate-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .selected-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--primary);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .paid-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #FF7E33, #FF5E00);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .paid-badge i {
+            font-size: 1rem;
+        }
+        
+        .alert-info {
+            background-color: #e6f3ff;
+            border-color: #b8d9ff;
+            color: #004085;
+            font-size: 1rem;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 15px;
+                height: auto;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .logo img {
+                height: 40px;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            body {
+                padding-top: 140px;
+            }
+            
+            .template-container {
+                padding: 25px;
+            }
+            
+            .template-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .template-header h2 {
+                font-size: 2rem;
+            }
+            
+            .template-header p {
+                font-size: 1rem;
+            }
+            
+            .generate-btn {
+                width: 100%;
+            }
+        }
+
+        footer {
+            background-color: #1F7D53;
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 1rem;
+        }
+
+        .footer-link:hover {
+            color: white;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .social-icon {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-icon:hover {
+            color: #ddd;
+        }
+
+        .copyright {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="/static/logo.png" alt="Logo">
+        </div>
+        <nav>
+            <button onclick="location.href='{{ url_for('resume') }}'" class="btn btn-primary">Back to Resume</button>
+            <div class="lang-switch">
+                <select id="lang-select" onchange="switchLanguage(this)">
+                    <option value="en">English</option>
+                    <option value="ar">عربي</option>
+                </select>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="template-container">
+        <div class="template-header">
+            <h2><i class="fas fa-file-alt me-2"></i>Select Your Resume Template</h2>
+            <p>Choose from our professionally designed templates to showcase your skills and experience</p>
+        </div>
+        
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i> Your resume data has been saved. Now select a template to generate your final resume.
+        </div>
+        
+        <div class="template-categories">
+            <!-- Professional Category -->
+            <div class="category">
+                <div class="category-title">
+                    <i class="fas fa-briefcase"></i>
+                    Professional Templates
+                </div>
+                <div class="template-options">
+                    <!-- Template 1 -->
+                    <div class="template-option" data-template-id="1">
+                        <div class="template-preview">
+                            <img src="/static/1.png" alt="Professional Blue Template">
+                        </div>
+                        <div class="template-name">Professional Blue</div>
+                        <div class="template-desc">Classic design with blue accents perfect for corporate environments</div>
+                        <button class="select-btn">Select Template</button>
+                    </div>
+                    
+                    <!-- Template 2 -->
+                    <div class="template-option" data-template-id="2">
+                        <div class="template-preview">
+                            <img src="/static/2.png" alt="Modern Professional Template">
+                        </div>
+                        <div class="template-name">Modern Professional</div>
+                        <div class="template-desc">Clean, contemporary layout with excellent readability</div>
+                        <button class="select-btn">Select Template</button>
+                    </div>
+                    
+                    <!-- Template 3 -->
+                    <div class="template-option" data-template-id="3">
+                        <div class="template-preview">
+                            <img src="/static/3.png" alt="Executive Classic Template">
+                        </div>
+                        <div class="template-name">Executive Classic</div>
+                        <div class="template-desc">Traditional executive style for senior professionals</div>
+                        <button class="select-btn">Select Template</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Designer Category -->
+            <div class="category">
+                <div class="category-title">
+                    <i class="fas fa-palette"></i>
+                    Creative Designer Templates
+                </div>
+                <div class="template-options">
+                    <!-- Template 4 -->
+                    <div class="template-option" data-template-id="4">
+                        <div class="template-preview">
+                            <img src="/static/4.png" alt="Creative Designer Template">
+                            <div class="paid-badge"><i class="fas fa-crown"></i> PREMIUM</div>
+                        </div>
+                        <div class="template-name">Creative Designer</div>
+                        <div class="template-desc">Innovative layout perfect for designers and creatives</div>
+                        <button class="select-btn">Select Template</button>
+                    </div>
+                    
+                    <!-- Template 5 -->
+                    <div class="template-option" data-template-id="5">
+                        <div class="template-preview">
+                            <img src="/static/5.png" alt="Titch-Innovator Template">
+                            <div class="paid-badge"><i class="fas fa-crown"></i> PREMIUM</div>
+                        </div>
+                        <div class="template-name">Titch-Innovator</div>
+                        <div class="template-desc">Unique modern design that stands out from the crowd</div>
+                        <button class="select-btn">Select Template</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Minimal Category -->
+            <div class="category">
+                <div class="category-title">
+                    <i class="fas fa-minus"></i>
+                    Minimal Templates
+                </div>
+                <div class="template-options">
+                    <!-- Template 6 -->
+                    <div class="template-option" data-template-id="6">
+                        <div class="template-preview">
+                            <img src="/static/6.png" alt="Minimal Template">
+                        </div>
+                        <div class="template-name">Minimal</div>
+                        <div class="template-desc">Simple and clean layout with maximum impact</div>
+                        <button class="select-btn">Select Template</button>
+                    </div>
+                    
+                    <!-- Template 7 -->
+                    <div class="template-option" data-template-id="7">
+                        <div class="template-preview">
+                            <img src="/static/7.png" alt="Modern Minimal Template">
+                            <div class="paid-badge"><i class="fas fa-crown"></i> PREMIUM</div>
+                        </div>
+                        <div class="template-name">Modern Minimal</div>
+                        <div class="template-desc">Sleek contemporary design with subtle elegance</div>
+                        <button class="select-btn">Select Template</button>
+                    </div>
+                    
+                    <!-- Template 8 -->
+                    <div class="template-option" data-template-id="8">
+                        <div class="template-preview">
+                            <img src="/static/8.png" alt="Ultra Minimal Template">
+                        </div>
+                        <div class="template-name">Ultra Minimal</div>
+                        <div class="template-desc">Extremely clean and simple for maximum focus on content</div>
+                        <button class="select-btn">Select Template</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <button id="generate-btn" class="generate-btn" disabled>
+            <i class="fas fa-file-pdf me-2"></i> Generate Resume PDF
+        </button>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="/about" class="footer-link">About Us</a>
+            <a href="/contact" class="footer-link">Contact</a>
+            <a href="/privacy" class="footer-link">Privacy Policy</a>
+            <a href="/terms" class="footer-link">Terms of Service</a>
+            <a href="/blog" class="footer-link">Blog</a>
+        </div>
+        
+        <div class="social-icons">
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        </div>
+        
+        <p class="copyright">© 2023 Amal. All rights reserved.</p>
+    </footer>
+    <div id="google_translate_element" style="opacity: 0; position: absolute; left: -9999px;"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let selectedTemplate = null;
+        const templateOptions = document.querySelectorAll('.template-option');
+        const generateBtn = document.getElementById('generate-btn');
+        
+        // Handle template selection
+        templateOptions.forEach(option => {
+            const selectBtn = option.querySelector('.select-btn');
+            
+            // Handle click on the select button
+            selectBtn.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent event from bubbling up
+                selectTemplate(option);
+            });
+            
+            // Also allow clicking anywhere on the card
+            option.addEventListener('click', function(e) {
+                // Only proceed if the click wasn't on the button itself
+                if (e.target !== selectBtn && !selectBtn.contains(e.target)) {
+                    selectTemplate(option);
+                    // Programmatically click the button to maintain consistent behavior
+                    selectBtn.click();
+                }
+            });
+        });
+        
+        function selectTemplate(option) {
+            // Remove selected class from all options
+            templateOptions.forEach(opt => {
+                opt.classList.remove('selected');
+                const badge = opt.querySelector('.selected-badge');
+                if (badge) badge.remove();
+            });
+            
+            // Add selected class to clicked option
+            option.classList.add('selected');
+            selectedTemplate = option.getAttribute('data-template-id');
+            
+            // Add selected badge
+            const badge = document.createElement('div');
+            badge.className = 'selected-badge';
+            badge.innerHTML = '<i class="fas fa-check me-1"></i> Selected';
+            option.appendChild(badge);
+            
+            // Enable generate button
+            generateBtn.disabled = false;
+        }
+        
+        // Handle generate button click
+        generateBtn.addEventListener('click', function() {
+            if (!selectedTemplate) {
+                alert('Please select a template first');
+                return;
+            }
+            
+            // Check if selected template is premium (4, 5, or 7)
+            const premiumTemplates = ['4', '5', '7'];
+            if (premiumTemplates.includes(selectedTemplate)) {
+                if (!confirm('This is a premium template. You need to upgrade your account to use it. Continue to payment?')) {
+                    return;
+                }
+                window.location.href = '/upgrade?template=' + selectedTemplate;
+                return;
+            }
+            
+            // Show loading state
+            const originalHtml = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Generating...';
+            this.disabled = true;
+            
+            // Send template selection to server
+            fetch('/set_template', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    template_id: selectedTemplate
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Redirect to PDF generation
+                    window.location.href = '/generate_from_template';
+                } else {
+                    throw new Error(data.error || 'Failed to select template');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error: ' + error.message);
+                this.innerHTML = originalHtml;
+                this.disabled = false;
+            });
+        });
+    });
+    let googleTranslateInstance = null;
+    function googleTranslateElementInit() {
+        googleTranslateInstance = new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'en,ar',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+
+    function switchLanguage(select) {
+        const lang = select.value;
+
+        if (lang === 'en') {
+            document.cookie = "googtrans=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+            document.cookie = "googtrans=; domain=" + location.hostname + "; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        } else {
+            const cookieValue = `/en/${lang}`;
+            document.cookie = `googtrans=${cookieValue}; path=/;`;
+            document.cookie = `googtrans=${cookieValue}; domain=${location.hostname}; path=/;`;
+        }
+
+        window.location.reload();
+    }
+
+    function hideGoogleTranslateUI() {
+        const selectors = [
+            '.goog-te-banner-frame',
+            '.goog-te-balloon-frame',
+            '#goog-gt-tt',
+            '.goog-te-menu-value',
+            '.goog-te-gadget-icon',
+            '.goog-te-gadget',
+            '.goog-te-combo',
+            '.skiptranslate'
+        ];
+
+        selectors.forEach(selector => {
+            const el = document.querySelector(selector);
+            if (el) {
+                el.style.display = 'none';
+                el.style.visibility = 'hidden';
+                el.style.height = '0';
+                el.style.width = '0';
+                el.style.overflow = 'hidden';
+                el.style.position = 'absolute';
+                el.style.top = '-9999px';
+                el.style.left = '-9999px';
+            }
+        });
+    }
+
+    function forceLTR() {
+        document.documentElement.setAttribute("dir", "ltr");
+        document.body.setAttribute("dir", "ltr");
+    }
+
+    function forceLTRHeader() {
+        const headerElements = document.querySelectorAll('header, nav, .logo, .lang-switch');
+        headerElements.forEach(el => {
+            el.style.direction = 'ltr';
+            el.style.textAlign = 'left';
+        });
+    }
+
+    window.addEventListener('DOMContentLoaded', function () {
+        if (!document.cookie.includes("googtrans")) {
+            document.cookie = "googtrans=/en/en; path=/;";
+            document.cookie = "googtrans=/en/en; domain=" + location.hostname + "; path=/;";
+        }
+
+        const select = document.getElementById("lang-select");
+        if (document.cookie.includes("googtrans=/en/ar")) {
+            select.value = "ar";
+        } else {
+            select.value = "en";
+        }
+
+        if (!document.querySelector('script[src*="translate.google.com"]')) {
+            const script = document.createElement('script');
+            script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+            document.body.appendChild(script);
+        }
+    });
+
+    const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            if (mutation.addedNodes) {
+                hideGoogleTranslateUI();
+            }
+        });
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            forceLTR();
+            forceLTRHeader();
+        }, 1000);
+    });  
+</script>
+</body>
+</html>
